@@ -1,0 +1,93 @@
+#pragma once
+
+#include "source_location.hpp"
+
+#include <system_error>
+
+//------------------------------------------------------------------------------
+
+namespace exc_loc {
+
+//------------------------------------------------------------------------------
+
+#ifdef EXCLOC_CPP11
+class system_error : public std::system_error
+{
+public:
+
+	system_error(
+		std::error_code _ec,
+		const std::source_location & _loc = std::source_location::current()
+	)
+		:	std::system_error( _ec )
+		,	m_source_location{ _loc }
+	{
+	}
+
+	system_error(
+		std::error_code _ec,
+		const std::string & _what_arg,
+		const std::source_location & _loc = std::source_location::current()
+	)
+		:	std::system_error( _ec, _what_arg )
+		,	m_source_location{ _loc }
+	{
+	}
+
+	system_error(
+		std::error_code _ec,
+		const char * _what_arg,
+		const std::source_location & _loc = std::source_location::current()
+	)
+		:	std::system_error( _ec, _what_arg )
+		,	m_source_location{ _loc }
+	{
+	}
+
+	system_error(
+		int _ev,
+		const std::error_category & _ecat,
+		const std::source_location & _loc = std::source_location::current()
+	)
+		:	std::system_error( _ev, _ecat )
+		,	m_source_location{ _loc }
+	{
+	}
+
+	system_error(
+		int _ev,
+		const std::error_category & _ecat,
+		const std::string & _what_arg,
+		const std::source_location & _loc = std::source_location::current()
+	)
+		:	std::system_error( _ev, _ecat, _what_arg )
+		,	m_source_location{ _loc }
+	{
+	}
+
+	system_error(
+		int _ev,
+		const std::error_category & _ecat,
+		const char * _what_arg,
+		const std::source_location & _loc = std::source_location::current()
+	)
+		:	std::system_error( _ev, _ecat, _what_arg )
+		,	m_source_location{ _loc }
+	{
+	}
+
+	const std::source_location & source_location() const noexcept
+	{
+		return m_source_location;
+	}
+
+private:
+
+	const std::source_location m_source_location;
+
+};
+#endif
+
+//------------------------------------------------------------------------------
+
+}

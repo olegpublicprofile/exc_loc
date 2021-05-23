@@ -1,0 +1,51 @@
+#pragma once
+
+#include "source_location.hpp"
+
+#include <exception>
+#include <string>
+
+//------------------------------------------------------------------------------
+
+namespace exc_loc {
+
+//------------------------------------------------------------------------------
+
+class exception : public std::exception
+{
+public:
+
+	exception(
+		std::string _msg,
+		const std::source_location & _loc = std::source_location::current()
+	) noexcept
+		:	m_msg{ std::move( _msg ) }
+		,	m_source_location{ _loc }
+	{
+	}
+
+	exception( std::source_location && _loc ) noexcept
+		:	m_source_location{ std::move( _loc ) }
+	{
+	}
+
+	const std::source_location & source_location() const noexcept
+	{
+		return m_source_location;
+	}
+
+	const char * what() const noexcept override
+	{
+		return m_msg.c_str();
+	}
+
+private:
+
+	const std::string m_msg;
+	const std::source_location m_source_location;
+};
+
+//------------------------------------------------------------------------------
+
+}
+

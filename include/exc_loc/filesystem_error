@@ -1,0 +1,68 @@
+#pragma once
+
+#include "source_location.hpp"
+
+#include <filesystem>
+
+//------------------------------------------------------------------------------
+
+namespace exc_loc {
+namespace filesystem {
+
+//------------------------------------------------------------------------------
+#ifdef EXCLOC_CPP17
+class filesystem_error : public std::filesystem::filesystem_error
+{
+public:
+
+	filesystem_error(
+		const std::string & _what_arg,
+		std::error_code _ec,
+		const std::source_location & _loc = std::source_location::current()
+	)
+		:	std::filesystem::filesystem_error( _what_arg, _ec )
+		,	m_source_location{ _loc }
+	{
+	}
+
+	filesystem_error(
+		const std::string & _what_arg,
+		const std::filesystem::path & _p1,
+		std::error_code _ec,
+		const std::source_location & _loc = std::source_location::current()
+	)
+		:	std::filesystem::filesystem_error( _what_arg, _p1, _ec )
+		,	m_source_location{ _loc }
+	{
+	}
+
+	filesystem_error(
+		const std::string & _what_arg,
+		const std::filesystem::path & _p1,
+		const std::filesystem::path & _p2,
+		std::error_code _ec,
+		const std::source_location & _loc = std::source_location::current()
+	)
+		:	std::filesystem::filesystem_error( _what_arg, _p1, _p2 ,_ec )
+		,	m_source_location{ _loc }
+	{
+	}
+
+
+	const std::source_location & source_location() const noexcept
+	{
+		return m_source_location;
+	}
+
+private:
+
+	const std::source_location m_source_location;
+
+};
+
+#endif
+
+//------------------------------------------------------------------------------
+
+} // namespace filesystem
+} // namespace exc_loc

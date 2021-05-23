@@ -1,0 +1,51 @@
+#pragma once
+
+#include "source_location.hpp"
+
+#include <stdexcept>
+
+//------------------------------------------------------------------------------
+
+namespace exc_loc {
+
+//------------------------------------------------------------------------------
+
+class out_of_range : public std::out_of_range
+{
+public:
+
+	out_of_range(
+		const std::string & _what_arg,
+		const std::source_location & _loc = std::source_location::current()
+	)
+		:	std::out_of_range( _what_arg )
+		,	m_source_location{ _loc }
+	{
+	}
+
+#ifdef EXCLOC_CPP11
+	out_of_range(
+		const char* _what_arg,
+		const std::source_location & _loc = std::source_location::current()
+
+	)
+		:	std::out_of_range( _what_arg )
+		,	m_source_location{ _loc }
+	{
+	}
+#endif
+
+	const std::source_location & source_location() const noexcept
+	{
+		return m_source_location;
+	}
+
+private:
+
+	const std::source_location m_source_location;
+
+};
+
+//------------------------------------------------------------------------------
+
+}

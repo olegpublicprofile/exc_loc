@@ -1,0 +1,40 @@
+#pragma once
+
+#include "source_location.hpp"
+
+#include <functional>
+
+//------------------------------------------------------------------------------
+
+namespace exc_loc {
+
+//------------------------------------------------------------------------------
+
+#ifdef EXCLOC_CPP11
+class bad_function_call : public std::bad_function_call
+{
+public:
+
+	bad_function_call(
+		const std::source_location & _loc = std::source_location::current()
+	) EXCLOC_NOEXCEPT
+		:	m_source_location{ _loc }
+	{
+	}
+
+	const std::source_location & source_location() const noexcept
+	{
+		return m_source_location;
+	}
+
+private:
+
+	const std::source_location m_source_location;
+
+};
+
+#endif
+
+//------------------------------------------------------------------------------
+
+}

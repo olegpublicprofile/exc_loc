@@ -1,0 +1,41 @@
+#pragma once
+
+#include "source_location.hpp"
+
+#include <optional>
+
+//------------------------------------------------------------------------------
+
+namespace exc_loc {
+
+//------------------------------------------------------------------------------
+
+#ifdef EXCLOC_CPP17
+
+class bad_optional_access : public std::bad_optional_access
+{
+public:
+
+	bad_optional_access(
+		const std::source_location & _loc = std::source_location::current()
+	)
+		:	m_source_location{ _loc }
+	{
+	}
+
+	const std::source_location & source_location() const noexcept
+	{
+		return m_source_location;
+	}
+
+private:
+
+	const std::source_location m_source_location;
+
+};
+
+#endif
+
+//------------------------------------------------------------------------------
+
+}
